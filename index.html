@@ -1,20 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello World</title>
-  <link rel="stylesheet" href="b.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片轮播</title>
+    <style>
+        #container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .image-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .image-wrapper img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .image-wrapper img:first-child {
+            display: block;
+        }
+
+        #image-selector {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #image-selector li {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        #image-selector li.selected {
+            background-color: red;
+        }
+    </style>
 </head>
+
 <body>
-  <h1>Hello World! aaaaaaaaaaaaaaaaaaaa</h1>
-  <img src="downloadfile-4.jpg" alt="Hello World from Space" style="width: 300px;">
-  <img src="2.jpg" alt="aaa" style="width: 200px;">
-  <p>This is the first file in my new Git repo.</p>
-  <p>hhhhhhhhhhhhhhhhhhhhhhh</p>
-  <p>ccccccccccccccccccccccccccccccccccccccccccc</p>
-  <p>This line is here to show how merging works.</p>
-  <p>A new line in our file!</p>
-  <div>hello emmmm</div>
+    <div id="container">
+        <div class="image-wrapper">
+            <img id="image1" src="https://sky-33.oss-cn-beijing.aliyuncs.com/bb/1.png" alt="Image 1">
+            <img id="image2" src="https://sky-33.oss-cn-beijing.aliyuncs.com/bb/2.jpg" alt="Image 2">
+            <img id="image3" src="https://sky-33.oss-cn-beijing.aliyuncs.com/bb/3.jpg" alt="Image 3">
+            <img id="image4" src="https://sky-33.oss-cn-beijing.aliyuncs.com/bb/4.jpg" alt="Image 4">
+        </div>
+        <ol id="image-selector">
+            <li class="selected">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ol>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const images = document.querySelectorAll(".image-wrapper img");
+            const selectors = document.querySelectorAll("#image-selector li");
+            let currentIndex = 0;
+            let intervalId;
+
+            function showImage(index) {
+                images.forEach((img, idx) => {
+                    img.style.display = (idx === index) ? "block" : "none";
+                });
+                selectors.forEach((li, idx) => {
+                    li.classList.toggle("selected", idx === index);
+                });
+            }
+
+            function startAutoSlide() {
+                intervalId = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    showImage(currentIndex);
+                }, 3000);
+            }
+
+            function stopAutoSlide() {
+                clearInterval(intervalId);
+            }
+
+            selectors.forEach((li, index) => {
+                li.addEventListener("mouseover", () => {
+                    stopAutoSlide();
+                    showImage(index);
+                });
+                li.addEventListener("mouseout", startAutoSlide);
+            });
+
+            startAutoSlide();
+        });
+
+    </script>
 </body>
+
 </html>
